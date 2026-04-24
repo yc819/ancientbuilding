@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <span class="section-kicker">知识结构</span>
+        <h1>知识图谱式内容聚合</h1>
+        <p>按照“成就 - 人物 - 著作 - 文化”四条知识链展开，便于课程汇报和故事化讲解。</p>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container knowledge-stack">
+        {% for dataset_key, records in knowledge_sections.items() %}
+        <article class="knowledge-section">
+            <div class="knowledge-head">
+                <div>
+                    <span class="section-kicker">{{ dataset_meta[dataset_key].label }}</span>
+                    <h2>{{ dataset_meta[dataset_key].full_label }}</h2>
+                </div>
+                <a href="{{ url_for('explorer') }}?dataset={{ dataset_key }}" class="inline-link">查看全部</a>
+            </div>
+            <div class="knowledge-grid">
+                {% for record in records[:6] %}
+                <a class="knowledge-card" href="{{ detail_url(record) }}">
+                    <div class="feature-avatar" style="--accent: {{ record.accent }}">{{ record.initial }}</div>
+                    <div>
+                        <h3>{{ record.title }}</h3>
+                        <div class="micro-meta">{{ record.era or record.year_label }} · {{ record.category }}</div>
+                        <p>{{ record.summary }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

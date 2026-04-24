@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero about-hero-no-kicker">
+    <div class="about-hero-media"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <h1>{{ about_page.hero_title }}</h1>
+        <p>{{ about_page.hero_description }}</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">{{ about_page.band_title }}</div>
+        <div class="about-breadcrumb">
+            您现在的位置：
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('about_page') }}">关于华章</a>
+            <span>&gt;</span>
+            <strong>{{ about_page.breadcrumb_title }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-block about-article-shell">
+    <div class="container about-article">
+        <article class="about-prose">
+            {% for paragraph in about_page.paragraphs %}
+            <p>{{ paragraph }}</p>
+            {% endfor %}
+        </article>
+
+        <figure class="about-feature-figure {% if about_section_key in ['framework', 'vision'] %}about-feature-figure-wide{% endif %} {% if not about_page.figure %}is-placeholder{% endif %}">
+            {% if about_page.figure %}
+            <img src="{{ about_page.figure }}" alt="{{ about_page.figure_alt }}">
+            {% if about_page.figure_caption %}
+            <figcaption>{{ about_page.figure_caption }}</figcaption>
+            {% endif %}
+            {% else %}
+            <div class="about-figure-placeholder" aria-label="{{ about_page.figure_alt }}">
+                <strong>专题图片预留</strong>
+                <p>{{ about_page.figure_caption }}</p>
+            </div>
+            {% endif %}
+        </figure>
+
+        <div class="about-highlight-grid">
+            {% for card in about_page.cards %}
+            <article class="about-highlight-card">
+                <h3>{{ card.title }}</h3>
+                <p>{{ card.text }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero about-hero-no-kicker">
+    <div class="about-hero-media about-hero-media-collections"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <h1>{{ topic_page.hero_title }}</h1>
+        <p>{{ topic_page.hero_description }}</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">{{ topic_page.band_title }}</div>
+        <div class="about-breadcrumb">
+            您当前的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('culture_page') }}">馆藏专题</a>
+            <span>&gt;</span>
+            <strong>{{ topic_page.breadcrumb_title }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-block culture-gallery-section">
+    <div class="container">
+        <div class="section-head museum-culture-section-head">
+            <div>
+                <span class="section-kicker">馆藏索引</span>
+                <h2>按专题浏览馆藏条目</h2>
+            </div>
+            <p>先按类别缩小范围，再进入具体条目查看图像、简介与相关线索。</p>
+        </div>
+        <div class="culture-filter-bar" id="culture-filter-bar">
+            <button class="culture-filter-chip is-active" type="button" data-category="">全部</button>
+            {% for item in museum_page.category_stats %}
+            <button class="culture-filter-chip" type="button" data-category="{{ item.label }}">{{ item.label }}</button>
+            {% endfor %}
+        </div>
+
+        <div class="culture-poster-grid" id="culture-poster-grid">
+            {% for item in museum_page.records %}
+            <a class="culture-poster-card" href="{{ detail_url(item) }}" data-category="{{ item.category }}">
+                <div class="culture-poster-art">
+                    <div class="culture-poster-band">
+                        <span>{{ item.category }}</span>
+                        <strong>{{ item.title }}</strong>
+                    </div>
+                    {% if item.image %}
+                    <img src="{{ item.image }}" alt="{{ item.title }}">
+                    {% else %}
+                    <div class="culture-poster-placeholder">{{ item.title }}</div>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="topic-pagination culture-gallery-pagination" id="culture-gallery-pagination"></div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/topic_culture.js') }}?v=20260422a"></script>
+{% endblock %}

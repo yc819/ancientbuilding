@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero about-hero-no-kicker">
+    <div class="about-hero-media about-hero-media-collections"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <h1>{{ topic_page.hero_title }}</h1>
+        <p>{{ topic_page.hero_description }}</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">{{ topic_page.band_title }}</div>
+        <div class="about-breadcrumb">
+            您当前的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('figures') }}">馆藏专题</a>
+            <span>&gt;</span>
+            <strong>{{ topic_page.breadcrumb_title }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-block treatise-exhibit-section">
+    <div class="container">
+        <div class="treatise-exhibit-shell">
+            <div class="treatise-filter-bar" id="treatise-filter-bar">
+                <div class="treatise-filter-title">著作类别：</div>
+                <div class="treatise-filter-options">
+                    <button class="treatise-filter-chip is-active" type="button" data-category="">全部</button>
+                    {% for item in museum_page.category_stats %}
+                    <button class="treatise-filter-chip" type="button" data-category="{{ item.label }}">{{ item.label }}</button>
+                    {% endfor %}
+                </div>
+                <label class="treatise-filter-select">
+                    <span>朝代</span>
+                    <select id="treatise-era-select">
+                        <option value="">全部朝代</option>
+                        {% for era in museum_page.eras %}
+                        <option value="{{ era }}">{{ era }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div>
+
+            <div class="treatise-exhibit-grid" id="treatise-exhibit-grid">
+                {% for item in museum_page.records %}
+                <a
+                    class="treatise-exhibit-card"
+                    href="{{ detail_url(item) }}"
+                    data-category="{{ item.category }}"
+                    data-era="{{ item.era }}"
+                >
+                    <div class="treatise-exhibit-cover">
+                        {% if item.image %}
+                        <img src="{{ item.image }}" alt="{{ item.title }}">
+                        {% else %}
+                        <div class="treatise-exhibit-placeholder">{{ item.title }}</div>
+                        {% endif %}
+                    </div>
+                    <article class="treatise-exhibit-body">
+                        <div class="treatise-exhibit-meta">
+                            <span>{{ item.era or "时代未详" }}</span>
+                            <span>{{ item.category or "建筑著作" }}</span>
+                            {% if item.secondary %}
+                            <span>{{ item.secondary }}</span>
+                            {% endif %}
+                        </div>
+                        <h2>{{ item.title }}</h2>
+                        <p>{{ item.body or item.summary }}</p>
+                        <div class="treatise-exhibit-timebar">
+                            <span class="treatise-exhibit-time-label">时间</span>
+                            <span class="treatise-exhibit-time-value">{{ item.year_label or item.era or "年代未详" }}</span>
+                        </div>
+                    </article>
+                </a>
+                {% endfor %}
+            </div>
+
+            <div class="topic-pagination treatise-exhibit-pagination" id="treatise-exhibit-pagination"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/topic_treatises.js') }}?v=20260422a"></script>
+{% endblock %}

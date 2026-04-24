@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="about-hero-media about-hero-media-interactive"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <span class="about-hero-kicker">参与互动</span>
+        <h1>网友留言</h1>
+        <p>参考传统问答留言页的阅读方式，把提问、回复和处理状态排成连续的信息流，方便浏览、留言和查找。</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">参与互动</div>
+        <div class="about-breadcrumb">
+            您当前的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('ai_page') }}">参与互动</a>
+            <span>&gt;</span>
+            <strong>网友留言</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-block message-wall-section">
+    <div class="container">
+        <div class="message-wall-shell">
+            <article class="message-wall-form-card">
+                <div class="section-head">
+                    <div>
+                        <span class="section-kicker">留言入口</span>
+                        <h2>写下一条反馈或问题</h2>
+                    </div>
+                    <p>这里适合记录页面体验、内容补充和教学使用中的问题，提交后会和下方留言流一起保存在当前浏览器。</p>
+                </div>
+                <div class="message-wall-form-head">
+                    <div>
+                        <div class="panel-title">我要留言</div>
+                        <p class="message-wall-form-note">本页留言保存在当前浏览器，适合站内演示、问题收集和问答整理。</p>
+                    </div>
+                    <div id="message-form-status" class="message-wall-form-status">待填写</div>
+                </div>
+
+                <form id="message-form" class="message-wall-form">
+                    <div class="message-wall-form-row">
+                        <label for="message-author">留言人</label>
+                        <input id="message-author" type="text" placeholder="请输入称呼或身份，例如：课程教师">
+                    </div>
+
+                    <div class="message-wall-form-row message-wall-form-row--meta">
+                        <div class="message-wall-meta-field">
+                            <label for="message-tag">问题类型</label>
+                            <select id="message-tag">
+                                <option value="功能建议">功能建议</option>
+                                <option value="页面体验">页面体验</option>
+                                <option value="内容补充">内容补充</option>
+                                <option value="教学使用">教学使用</option>
+                                <option value="问题反馈">问题反馈</option>
+                            </select>
+                        </div>
+                        <div class="message-wall-meta-field">
+                            <label for="message-source">相关页面</label>
+                            <select id="message-source">
+                                <option value="">未指定页面</option>
+                                <option value="/ai">快问快答</option>
+                                <option value="/messages">网友留言</option>
+                                <option value="/collections">收藏室</option>
+                                <option value="/achievements">建筑成就</option>
+                                <option value="/explorer/visualization">可视化总览</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="message-wall-form-row message-wall-form-row--textarea">
+                        <label for="message-content">留言内容</label>
+                        <textarea id="message-content" rows="5" placeholder="请写清你的问题、建议，或希望补充的内容。"></textarea>
+                    </div>
+
+                    <div class="message-wall-form-actions">
+                        <span id="message-char-count" class="message-wall-form-hint">0 / 300</span>
+                        <div class="message-wall-form-buttons">
+                            <button class="button button-primary" type="submit">提交留言</button>
+                            <button id="message-form-reset" class="button button-secondary" type="button">清空内容</button>
+                        </div>
+                    </div>
+                </form>
+            </article>
+
+            <div>
+                <div class="section-head">
+                    <div>
+                        <span class="section-kicker">留言流</span>
+                        <h2>按条件查看最新留言</h2>
+                    </div>
+                    <p>可按类型、状态和关键词筛选，便于回看已提交的问题与处理进度。</p>
+                </div>
+                <div class="message-wall-toolbar">
+                    <div class="message-wall-toolbar-main">
+                        <input id="message-search" type="text" placeholder="搜索留言人、正文、回复或来源页面">
+                        <select id="message-filter-tag">
+                            <option value="">全部类型</option>
+                            <option value="功能建议">功能建议</option>
+                            <option value="页面体验">页面体验</option>
+                            <option value="内容补充">内容补充</option>
+                            <option value="教学使用">教学使用</option>
+                            <option value="问题反馈">问题反馈</option>
+                        </select>
+                        <select id="message-filter-status">
+                            <option value="">全部状态</option>
+                            <option value="已回复">已回复</option>
+                            <option value="待整理">待整理</option>
+                        </select>
+                    </div>
+                    <div id="message-filter-meta" class="message-wall-toolbar-note">显示全部留言</div>
+                </div>
+
+                <div id="message-list" class="message-thread-list"></div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.MESSAGE_BOARD_SEED = {{ message_seed | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/messages.js') }}?v=20260423b"></script>
+{% endblock %}

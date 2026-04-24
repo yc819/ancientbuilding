@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="landing-hero" data-hero-slider>
+    <div class="landing-slides" aria-hidden="true">
+        <div class="landing-slide is-active" style="background-image:url('/static/images/gugong.jpg')" data-hero-slide></div>
+        <div class="landing-slide" style="background-image:url('/static/images/category-palace-new.jpg')" data-hero-slide></div>
+        <div class="landing-slide" style="background-image:url('/static/images/home-slide-3.jpg')" data-hero-slide></div>
+    </div>
+    <div class="landing-overlay"></div>
+    <div class="container landing-inner">
+        <h1 class="visually-hidden">中国古代建筑成就数字专题网站</h1>
+        <div class="landing-copy">
+            <div class="landing-copy-block">
+                <div class="hero-actions landing-actions">
+                    <a href="#category-section" class="button button-primary">探索建筑</a>
+                    <a href="{{ url_for('achievements') }}" class="button button-secondary">了解文化</a>
+                </div>
+            </div>
+        </div>
+        <div class="landing-hero-bottom">
+            <div class="landing-hero-controls">
+                <button class="landing-hero-arrow" type="button" aria-label="上一张" data-hero-prev>&lsaquo;</button>
+                <div class="landing-hero-dots" role="tablist" aria-label="首页主视觉切换">
+                    <button class="landing-hero-dot is-active" type="button" aria-label="切换到第1张" data-hero-dot="0"></button>
+                    <button class="landing-hero-dot" type="button" aria-label="切换到第2张" data-hero-dot="1"></button>
+                    <button class="landing-hero-dot" type="button" aria-label="切换到第3张" data-hero-dot="2"></button>
+                </div>
+                <button class="landing-hero-arrow" type="button" aria-label="下一张" data-hero-next>&rsaquo;</button>
+            </div>
+        </div>
+        <div class="landing-side-actions">
+            <button type="button" class="floating-fab story-fab" data-open-stories>策展故事</button>
+            <button type="button" class="floating-fab quiz-fab" data-open-quiz>知识测验</button>
+        </div>
+    </div>
+</section>
+
+<section id="category-section" class="section-block cream-section">
+    <div class="container">
+        <div class="category-intro">
+            <span class="category-intro-kicker">建筑专题</span>
+            <h2>四大建筑类型</h2>
+            <p>从院落民居到皇家宫殿，从政务官署到跨水桥梁，概览中国古代建筑在生活、制度与工程中的代表形态。</p>
+        </div>
+        <div class="category-grid">
+            {% for card in building_gallery_cards %}
+            <a class="category-panel {% if card.image %}has-image{% else %}is-empty{% endif %}" href="{{ detail_url(card) }}">
+                <div class="category-panel-image" {% if card.image %}style="background-image:url('{{ card.image }}')" {% endif %}>
+                    {% if not card.image %}
+                    <span class="category-panel-placeholder">待补充图片</span>
+                    {% endif %}
+                    <h3>{{ card.label }}</h3>
+                </div>
+                <div class="category-panel-body">
+                    <strong>{{ card.tagline }}</strong>
+                    <p>{{ card.summary }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="category-summary-module">
+            <div class="category-summary-head">
+                <span class="category-summary-kicker">代表条目</span>
+                <h3>四类典型建筑速览</h3>
+                <p>每个类别保留一个代表条目，合并为一排展示，继续使用你自己的建筑成就数据。</p>
+            </div>
+            <div class="category-summary-row">
+                {% for card in building_gallery_cards %}
+                <a class="category-summary-card" href="{{ detail_url(card) }}">
+                    <div class="category-summary-photo" {% if card.summary_image %}style="background-image:url('{{ card.summary_image }}')" {% endif %}>
+                        <span class="category-summary-label">{{ card.label }}</span>
+                        <div class="category-summary-title">{{ card.title }}</div>
+                    </div>
+                    <div class="category-summary-overlay">
+                        <strong>{{ card.title }}</strong>
+                        <div class="category-summary-era">{{ card.era }}</div>
+                        <p>{{ card.summary }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-block history-section">
+    <div class="container">
+        <div class="section-head centered-head">
+            <span class="section-kicker">时间叙事</span>
+            <h2>历史年表</h2>
+            <p>按时期梳理中国古代建筑的技术演进、空间范式与代表性实例，形成更清晰的历史脉络。</p>
+        </div>
+        <div class="history-timeline">
+            <div class="history-line"></div>
+            {% for item in history_timeline %}
+            <article class="history-card {% if loop.index is even %}right{% else %}left{% endif %}">
+                <div class="history-node"></div>
+                <div class="history-box history-box--{{ item.theme }}">
+                    <div class="history-motif">{{ item.motif }}</div>
+                    <strong>{{ item.period }}</strong>
+                    <h3>{{ item.core }}</h3>
+                    <div class="history-landmark-head">代表性建筑</div>
+                    <div class="history-landmarks">
+                        {% for landmark in item.landmarks %}
+                        <span class="history-landmark">{{ landmark }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-block muted-section home-function-grid home-function-grid--compact">
+    <div class="container">
+        <div class="tool-preview-grid">
+            <a class="tool-preview-card reveal-card tool-preview-card--browser" href="{{ url_for('explorer') }}" data-reveal style="--delay: 0ms;">
+                <div class="tool-preview-visual">
+                    <div class="mini-stack">
+                        <div class="mini-stack-item">板块筛选</div>
+                        <div class="mini-stack-item">地区切换</div>
+                        <div class="mini-stack-item">条目检索</div>
+                    </div>
+                </div>
+                <div class="tool-preview-body">
+                    <h3>数据浏览</h3>
+                    <p>按板块、地区与类型快速筛选条目，作为整站最直接的浏览起点。</p>
+                    <span class="tool-preview-link">进入数据浏览</span>
+                </div>
+            </a>
+
+            {% for card in home_tool_cards %}
+            {% if card.key in ['viz', 'ai', 'collection'] %}
+            <a class="tool-preview-card reveal-card tool-preview-card--{{ card.key }}" href="{% if card.key == 'viz' %}{{ url_for('explorer_visualization') }}{% else %}{{ card.route }}{% endif %}" data-reveal style="--delay: {{ loop.index * 100 }}ms;">
+                <div class="tool-preview-visual">
+                    {% if card.preview == 'bars' %}
+                    <div class="mini-bars">
+                        {% for bar in card.bars %}
+                        <div class="mini-bar-row">
+                            <span class="mini-bar-label">{{ bar.label }}</span>
+                            <div class="mini-bar-track">
+                                <div class="mini-bar-fill" style="width: {{ bar.width }}%; --bar-color: {{ bar.accent }}"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% elif card.preview == 'chat' %}
+                    <div class="mini-chat">
+                        {% for message in card.messages %}
+                        <div class="mini-chat-bubble mini-chat-bubble--{{ message.role }}">{{ message.text }}</div>
+                        {% endfor %}
+                    </div>
+                    {% elif card.preview == 'stack' %}
+                    <div class="mini-stack">
+                        {% for item in card["items"] %}
+                        <div class="mini-stack-item">{{ item }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="tool-preview-body">
+                    <h3>{% if card.key == 'viz' %}可视化总览{% else %}{{ card.title }}{% endif %}</h3>
+                    <p>{% if card.key == 'viz' %}从地区分布、板块占比与建筑流向三组视图进入你的自有数据。{% else %}{{ card.description }}{% endif %}</p>
+                    <span class="tool-preview-link">
+                        {% if card.key == 'viz' %}进入可视化{% elif card.key == 'ai' %}进入快问快答{% elif card.key == 'collection' %}进入收藏室{% else %}进入{{ card.title }}{% endif %}
+                    </span>
+                </div>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

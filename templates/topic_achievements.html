@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero about-hero-no-kicker">
+    <div class="about-hero-media about-hero-media-special"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <h1>{{ topic_page.hero_title }}</h1>
+        <p>{{ topic_page.hero_description }}</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">{{ topic_page.band_title }}</div>
+        <div class="about-breadcrumb">
+            您当前的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('achievements') }}">专题陈列</a>
+            <span>&gt;</span>
+            <strong>{{ topic_page.breadcrumb_title }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-block topic-exhibit-shell">
+    <div class="container">
+        <div class="topic-filter-bar">
+            <div class="topic-filter-tabs" data-achievement-filters>
+                <button class="topic-filter-tab is-active" type="button" data-category="">全部</button>
+                <button class="topic-filter-tab" type="button" data-category="民居">民居</button>
+                <button class="topic-filter-tab" type="button" data-category="官署">官署</button>
+                <button class="topic-filter-tab" type="button" data-category="皇宫">皇宫</button>
+                <button class="topic-filter-tab" type="button" data-category="桥梁">桥梁</button>
+            </div>
+            <div class="topic-filter-meta">
+                <strong id="achievement-count">{{ exhibit_cards|length }}</strong>
+                <span>项展品</span>
+            </div>
+        </div>
+
+        <div class="topic-exhibit-wall" id="achievement-exhibit-wall">
+            {% for card in exhibit_cards %}
+            <article class="topic-exhibit-card {% if card.is_reverse %}is-reverse{% endif %}" data-category="{{ card.category }}">
+                <div class="topic-exhibit-media">
+                    {% if card.image %}
+                    <img src="{{ card.image }}" alt="{{ card.title }}">
+                    {% else %}
+                    <div class="topic-exhibit-placeholder">{{ card.title }}</div>
+                    {% endif %}
+                </div>
+                <div class="topic-exhibit-copy">
+                    <div class="topic-exhibit-copy-inner">
+                        <div class="topic-exhibit-kicker">{{ card.category_title }}</div>
+                        <h3>{{ card.title }}</h3>
+                        <p class="topic-exhibit-lead">{{ card.lead }}</p>
+                        <p class="topic-exhibit-summary">{{ card.summary }}</p>
+                        <div class="topic-exhibit-meta">
+                            {% for item in card.meta_items %}
+                            <span>{{ item }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="topic-exhibit-actions">
+                        <a href="{{ card.intro_href }}">建筑简介</a>
+                        <a href="{{ card.digital_href }}">视频介绍</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="topic-pagination" id="achievement-pagination"></div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/topic_achievements.js') }}?v=20260422b"></script>
+{% endblock %}

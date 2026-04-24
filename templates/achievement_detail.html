@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="about-hero-media"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner about-hero-no-kicker">
+        <h1>{{ record.title }}</h1>
+        <p>{{ record.summary }}</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band achievement-detail-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">建筑成就</div>
+        <div class="about-breadcrumb">
+            您当前的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('achievements') }}">专题陈列</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('achievements') }}">建筑成就</a>
+            <span>&gt;</span>
+            <strong>{{ record.title }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="achievement-detail-shell">
+    <div class="container">
+        <article class="achievement-detail-hero achievement-detail-content-width">
+            <div class="achievement-detail-media">
+                {% if record.image %}
+                <img src="{{ record.image }}" alt="{{ record.title }}">
+                {% else %}
+                <div class="achievement-detail-placeholder">{{ record.title }}</div>
+                {% endif %}
+            </div>
+
+            <div class="achievement-detail-copy">
+                <div class="achievement-detail-copy-inner">
+                    {% if record.category %}
+                    <span class="achievement-detail-kicker">{{ record.category }}</span>
+                    {% endif %}
+                    <h2>建筑概览</h2>
+                    <p class="achievement-detail-lead">{{ record.summary }}</p>
+
+                    <div class="achievement-detail-meta">
+                        {% for pair in record.detail_pairs[:4] %}
+                        <span>{{ pair.label }}：{{ pair.value }}</span>
+                        {% endfor %}
+                    </div>
+                    <p class="achievement-detail-body">{{ record.body }}</p>
+                    <div class="achievement-detail-actions">
+                        <a class="button button-primary" href="{{ url_for('achievements') }}">返回建筑列表</a>
+                        <button class="button button-secondary" type="button" data-favorite-toggle data-record-id="{{ record.id }}">收藏</button>
+                    </div>
+                </div>
+
+                <div class="achievement-detail-tabs">
+                    <a class="is-active" href="{{ request.path }}">建筑简介</a>
+                    <a href="{{ digital_href }}">视频介绍</a>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="section-block achievement-article-block">
+    <div class="container">
+        <div class="achievement-article-single achievement-detail-content-width">
+            <article class="achievement-article-main achievement-article-main--single">
+                {% for paragraph in article_paragraphs %}
+                <p class="achievement-article-paragraph">{{ paragraph }}</p>
+                {% endfor %}
+                {% if record.category or record.era or record.region %}
+                <p class="achievement-article-paragraph">{{ record.title }} 作为{% if record.category %}{{ record.category }}{% else %}代表性建筑{% endif %}{% if record.era %}，形成于{{ record.era }}时期{% endif %}{% if record.region %}，并坐落于{{ record.region }}{% endif %}，其价值不仅在于单体形制本身，也在于它所承载的时代制度、空间秩序与营造观念。</p>
+                {% endif %}
+                {% if record.year_label or record.secondary %}
+                <p class="achievement-article-paragraph">{% if record.year_label %}从时间线索看，{{ record.title }}的建造年代可追溯至{{ record.year_label }}，{% endif %}{% if record.secondary %}而与之相关的人物包括{{ record.secondary }}。{% endif %}这些信息有助于把建筑放回到更完整的历史语境中理解，而不仅仅停留在图像层面的观看。</p>
+                {% endif %}
+                <p class="achievement-article-paragraph">结合现有条目资料来看，这一建筑既体现了古代建筑在结构、尺度和空间组织上的成熟经验，也反映出不同历史阶段对礼制、权力、功能与审美的综合表达。由此继续延展，可以进一步联系同类建筑、相关人物、著作文献与建筑文化专题来形成更完整的认识。</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+{% if feature_tiles %}
+<section class="section-block achievement-feature-block">
+    <div class="container">
+        <div class="achievement-feature-divider" aria-hidden="true"></div>
+        <div class="achievement-feature-grid">
+            {% for tile in feature_tiles %}
+            <a class="achievement-feature-tile is-{{ tile.theme }}" href="{{ tile.href }}">
+                <div class="achievement-feature-emblem">
+                    {% if tile.image %}
+                    <img src="{{ tile.image }}" alt="{{ tile.title }}">
+                    {% endif %}
+                </div>
+                <strong>{{ tile.title }}</strong>
+                <span>{{ tile.subtitle }}</span>
+                <p>{{ tile.summary }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

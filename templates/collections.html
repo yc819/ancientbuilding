@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="about-hero-media about-hero-media-interactive"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <span class="about-hero-kicker">参与互动</span>
+        <h1>收藏室</h1>
+        <p>把你收藏的建筑、人物、著作和文化条目整理成可继续阅读、可导出提纲、可按主题筛选的个人专题集合。</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">参与互动</div>
+        <div class="about-breadcrumb">
+            您当前的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('ai_page') }}">参与互动</a>
+            <span>&gt;</span>
+            <strong>收藏室</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-block interactive-hub-section collection-intro-section">
+    <div class="container">
+        <div class="collection-overview-layout">
+            <article class="interactive-search-card interactive-collection-intro-card">
+                <div class="interactive-panel-head">
+                    <div>
+                        <span class="section-kicker">我的收藏夹</span>
+                        <h2>把零散收藏整理成专题</h2>
+                    </div>
+                    <div id="collection-status" class="interactive-status-tag">等待加载</div>
+                </div>
+                <p>在任意详情页点击“收藏”后，条目会自动进入收藏室。这里支持按数据类型和关键词筛选、复制导出摘要、移除无用条目和清空当前收藏。</p>
+                <div id="collection-metrics" class="collection-metric-row"></div>
+                <div class="collection-actions-bar">
+                    <input id="collection-search" type="text" placeholder="搜索标题、朝代、类别、地区">
+                    <select id="collection-filter-dataset">
+                        <option value="">全部类型</option>
+                    </select>
+                    <button id="collection-export" class="button button-primary" type="button">复制专题提纲</button>
+                    <button id="collection-clear-all" class="button button-secondary" type="button">清空收藏</button>
+                </div>
+                <div id="collection-export-note" class="interactive-toolbar-hint">导出内容会自动整理为便于继续阅读或汇报的简明提纲。</div>
+            </article>
+
+            <aside class="interactive-side-note collection-side-panel">
+                <section class="collection-side-section">
+                    <div class="panel-title">使用建议</div>
+                    <ul class="interactive-note-list">
+                        <li>先收藏 3 到 5 个核心条目，再补人物、著作和文化概念。</li>
+                        <li>收藏过多时，可以先按类型筛一轮，删除明显无关的条目。</li>
+                    </ul>
+                </section>
+                <section class="collection-side-section">
+                    <div class="panel-title">专题线索统计</div>
+                    <div id="collection-topics" class="collection-topic-list">
+                        <div class="empty-state">收藏加载后，这里会自动统计出现最多的类型和主题。</div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<section class="section-block interactive-hub-section interactive-hub-section--soft collection-list-section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <h2>当前收藏室</h2>
+            </div>
+            <div id="collection-filter-meta" class="interactive-toolbar-hint"></div>
+        </div>
+        <div id="collections-grid" class="collection-record-grid collection-record-grid--flat">
+            <div class="empty-state">正在读取收藏内容…</div>
+        </div>
+        <div id="collection-pagination" class="collection-pagination" hidden></div>
+    </div>
+</section>
+
+<section class="section-block interactive-hub-section interactive-hub-section--soft">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">推荐收藏</span>
+                <h2>还没有开始时，可以先从这些条目收藏起</h2>
+            </div>
+        </div>
+        <div class="interactive-recommend-grid">
+            {% for item in featured_records %}
+            <a class="interactive-record-card" href="{{ detail_url(item) }}">
+                {% if item.image %}
+                <img src="{{ item.image }}" alt="{{ item.title }}">
+                {% endif %}
+                <div>
+                    <strong>{{ item.title }}</strong>
+                    <span>{{ item.dataset_label }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/collections.js') }}?v=20260423c"></script>
+{% endblock %}

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ browser_title | default(page_title) }} | 中国古代建筑成就</title>
+    <meta name="description" content="基于中国古代建筑相关 CSV 数据构建的专题展陈、馆藏专题与互动浏览网站。">
+    {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}?v=20260424c">
+</head>
+<body data-page="{{ page_key }}" class="site-page">
+    <div class="site-shell">
+        {% set nav_section = nav_section | default(page_key) %}
+        <header class="site-header">
+            <div class="container home-header-inner">
+                <a class="brand-mark" href="{{ url_for('home') }}">
+                    <img class="brand-emblem" src="{{ url_for('static', filename='images/brand-emblem.svg') }}" alt="古建华章纹章">
+                    <span class="brand-copy">
+                        <span class="brand-theme">古建华章</span>
+                        <span class="brand-title">中国古代建筑成就</span>
+                        <span class="brand-subtitle">中华优秀传统文化系列专题网站</span>
+                    </span>
+                </a>
+                <nav class="home-nav">
+                    <a href="{{ url_for('home') }}" class="nav-link {% if nav_section == 'home' %}is-active{% endif %}">首页</a>
+                    <div class="home-nav-item">
+                        <a href="{{ url_for('about_page') }}" class="nav-link {% if nav_section == 'about' %}is-active{% endif %}">关于华章</a>
+                        <div class="home-nav-panel">
+                            <a href="{{ url_for('about_page') }}">华章简介</a>
+                            <a href="{{ url_for('about_framework_page') }}">内容框架</a>
+                            <a href="{{ url_for('about_vision_page') }}">营造脉络</a>
+                        </div>
+                    </div>
+                    <div class="home-nav-item">
+                        <a href="{{ url_for('explorer') }}" class="nav-link {% if nav_section == 'explorer' %}is-active{% endif %}">数据导览</a>
+                        <div class="home-nav-panel">
+                            <a href="{{ url_for('explorer') }}">数据浏览</a>
+                            <a href="{{ url_for('explorer_visualization') }}">可视化总览</a>
+                        </div>
+                    </div>
+                    <div class="home-nav-item">
+                        <a href="{{ url_for('achievements') }}" class="nav-link {% if nav_section == 'special' %}is-active{% endif %}">专题陈列</a>
+                        <div class="home-nav-panel">
+                            <a href="{{ url_for('achievements') }}">建筑成就</a>
+                            <a href="{{ url_for('gallery') }}">影像展厅</a>
+                            <a href="{{ url_for('map_page') }}">建筑地图</a>
+                        </div>
+                    </div>
+                    <div class="home-nav-item">
+                        <a href="{{ url_for('figures') }}" class="nav-link {% if nav_section == 'collections' %}is-active{% endif %}">馆藏专题</a>
+                        <div class="home-nav-panel">
+                            <a href="{{ url_for('figures') }}">杰出人物</a>
+                            <a href="{{ url_for('treatises_page') }}">建筑著作</a>
+                            <a href="{{ url_for('culture_page') }}">建筑文化</a>
+                        </div>
+                    </div>
+                    <div class="home-nav-item">
+                        <a href="{{ url_for('ai_page') }}" class="nav-link {% if nav_section == 'interactive' %}is-active{% endif %}">参与互动</a>
+                        <div class="home-nav-panel">
+                            <a href="{{ url_for('ai_page') }}">快问快答</a>
+                            <a href="{{ url_for('messages_page') }}">网友留言</a>
+                            <a href="{{ url_for('collections') }}">收藏室</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        {% if page_key == 'home' %}
+        <div class="floating-actions">
+            <button type="button" class="floating-fab story-fab" data-open-stories>策展故事</button>
+            <button type="button" class="floating-fab quiz-fab" data-open-quiz>知识测验</button>
+        </div>
+
+        <div class="story-panel-overlay" data-story-overlay hidden>
+            <aside class="story-panel">
+                <div class="story-panel-head">
+                    <div>
+                        <div class="panel-title">策展故事</div>
+                        <h3>四条浏览路线</h3>
+                    </div>
+                    <button type="button" class="icon-button" data-close-stories>关闭</button>
+                </div>
+                <div class="story-panel-body" data-story-panel></div>
+            </aside>
+        </div>
+
+        <div class="quiz-modal-overlay" data-quiz-overlay hidden>
+            <section class="quiz-modal">
+                <div class="quiz-head">
+                    <div>
+                        <div class="panel-title">知识测验</div>
+                        <h3>快速认识中国古代建筑知识</h3>
+                    </div>
+                    <button type="button" class="icon-button" data-close-quiz>关闭</button>
+                </div>
+                <div class="quiz-body" data-quiz-panel></div>
+            </section>
+        </div>
+        {% endif %}
+
+        <footer class="site-footer">
+            <div class="container footer-grid">
+                <div class="footer-brand">
+                    <a class="footer-brand-mark" href="{{ url_for('home') }}">
+                        <img class="footer-brand-emblem" src="{{ url_for('static', filename='images/brand-emblem.svg') }}" alt="古建华章纹章">
+                        <span class="footer-brand-copy">
+                            <span class="footer-brand-theme">古建华章</span>
+                            <span class="footer-brand-title">中国古代建筑成就</span>
+                            <span class="footer-brand-subtitle">以图像、数据与时间脉络重组中国古代建筑的数字展陈</span>
+                        </span>
+                    </a>
+                </div>
+                <div class="footer-nav-col">
+                    <h3>导航</h3>
+                    <nav class="footer-nav-links">
+                        <a href="{{ url_for('home') }}">首页</a>
+                        <a href="{{ url_for('about_page') }}">关于华章</a>
+                        <a href="{{ url_for('explorer') }}">数据导览</a>
+                        <a href="{{ url_for('achievements') }}">专题陈列</a>
+                        <a href="{{ url_for('figures') }}">馆藏专题</a>
+                        <a href="{{ url_for('ai_page') }}">参与互动</a>
+                    </nav>
+                </div>
+                <div class="footer-about">
+                    <h3>关于</h3>
+                    <p>“古建华章”围绕建筑成就、杰出人物、建筑著作与建筑文化四类数据，构建兼具展陈感、检索性与互动性的中国古代建筑专题网站。</p>
+                </div>
+            </div>
+            <div class="container footer-bottom">
+                <p>2026 中国大学生计算机设计大赛 · 古建华章 · 中国古代建筑成就</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        window.SITE_OVERVIEW = {{ overview | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

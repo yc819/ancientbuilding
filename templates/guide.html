@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="about-hero-media about-hero-media-interactive"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <span class="about-hero-kicker">参与互动</span>
+        <h1>快问快答</h1>
+        <p>把站内知识问答、追问建议和相关条目整合在一个页面里，让用户更快提出问题、理解答案并继续深入浏览。</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">参与互动</div>
+        <div class="about-breadcrumb">
+            您当前的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('ai_page') }}">参与互动</a>
+            <span>&gt;</span>
+            <strong>快问快答</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-block interactive-hub-section interactive-guide-input-section">
+    <div class="container">
+        <div class="interactive-hub-layout interactive-guide-layout">
+            <article class="interactive-search-card interactive-ask-card">
+                <div class="interactive-panel-head">
+                    <div>
+                        <h2>先提一个明确问题</h2>
+                    </div>
+                    <div id="guide-status" class="interactive-status-tag">等待提问</div>
+                </div>
+                <p>支持按朝代、建筑类型、人物、著作、文化概念提问。问题越具体，返回的相关条目和后续追问越有针对性。</p>
+                <div class="interactive-ask-box">
+                    <textarea id="guide-question" rows="4" placeholder="例如：宋代有哪些重要的建筑著作？这些著作与营造制度有什么关系？"></textarea>
+                    <div class="interactive-toolbar">
+                        <div class="interactive-toolbar-group">
+                            <button id="guide-submit" class="button button-primary" type="button">开始提问</button>
+                            <button id="guide-clear" class="button button-secondary" type="button">清空问题</button>
+                        </div>
+                        <span class="interactive-toolbar-hint">按 Enter 提问，Shift + Enter 换行</span>
+                    </div>
+                </div>
+
+                <div class="interactive-guide-subgrid">
+                    <div class="interactive-prompt-block interactive-prompt-block--card interactive-prompt-block--wide">
+                        <div class="interactive-mini-title">提问模板</div>
+                        <div class="interactive-chip-cloud">
+                            {% for item in suggested_questions %}
+                            <button class="question-chip" type="button" data-question="{{ item }}">{{ item }}</button>
+                            {% endfor %}
+                            <button class="question-chip" type="button" data-question="比较宫殿建筑与民居建筑在空间组织上的差异。">比较不同类型</button>
+                            <button class="question-chip" type="button" data-question="某一建筑与哪些人物、著作或文化观念有关？">追问关联线索</button>
+                        </div>
+                    </div>
+
+                    <div class="interactive-prompt-block interactive-prompt-block--card interactive-prompt-block--compact">
+                        <div class="interactive-mini-title">最近提问</div>
+                        <div id="guide-recent" class="interactive-history-list">
+                            <div class="empty-state">还没有提问记录，可以先从模板开始。</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="interactive-service-panel interactive-side-stack interactive-guide-side">
+                <article class="interactive-side-note">
+                    <div class="panel-title">怎么问更容易得到有效答案</div>
+                    <ul class="interactive-note-list">
+                        <li>优先写清对象：建筑名称、人物姓名、著作名称或文化概念。</li>
+                        <li>再补一个范围：朝代、类型、地区、用途或比较维度。</li>
+                        <li>如果想继续查资料，建议直接问“还有哪些相关条目”或“和谁有关”。</li>
+                    </ul>
+                </article>
+                <div class="interactive-service-panel">
+                    <div class="panel-title">互动服务</div>
+                    <div class="interactive-service-list">
+                        {% for item in service_cards %}
+                        <a class="interactive-service-card" href="{{ item.href }}">
+                            <strong>{{ item.title }}</strong>
+                            <p>{{ item.text }}</p>
+                            <span>{{ item.label }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<section class="section-block interactive-hub-section interactive-hub-section--soft interactive-guide-answer-section">
+    <div class="container interactive-answer-layout interactive-answer-layout--wide interactive-guide-answer-layout">
+        <article class="interactive-answer-panel">
+            <div class="interactive-panel-head">
+                <div class="panel-title">回答结果</div>
+                <div class="interactive-toolbar-group">
+                    <button id="guide-copy" class="button button-secondary" type="button">复制答案</button>
+                    <button id="guide-reset-answer" class="button button-secondary" type="button">清空结果</button>
+                </div>
+            </div>
+            <div id="guide-answer" class="interactive-answer-body">输入问题后，这里会显示简洁回答、相关条目和建议追问。</div>
+            <div class="interactive-prompt-block">
+                <div class="interactive-mini-title">建议继续追问</div>
+                <div id="guide-followups" class="interactive-followup-list">
+                    <div class="empty-state">系统会根据当前答案自动补出 2 到 3 个继续追问方向。</div>
+                </div>
+            </div>
+        </article>
+
+        <article class="interactive-answer-panel">
+            <div class="interactive-panel-head">
+                <div class="panel-title">相关条目</div>
+                <div id="guide-match-count" class="interactive-toolbar-hint">等待检索</div>
+            </div>
+            <div id="guide-matches" class="knowledge-grid interactive-answer-grid">
+                <div class="empty-state">提问后会在这里显示站内最相关的建筑、人物、著作或文化条目。</div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="section-block interactive-hub-section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <h2>从常见问题直接开始</h2>
+            </div>
+        </div>
+        <div class="interactive-hot-grid">
+            {% for item in hot_questions %}
+            <button class="interactive-hot-card" type="button" data-question="{{ item.question }}">
+                <strong>{{ item.title }}</strong>
+                <span>{{ item.question }}</span>
+                <p>{{ item.summary }}</p>
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/guide.js') }}?v=20260423b"></script>
+{% endblock %}

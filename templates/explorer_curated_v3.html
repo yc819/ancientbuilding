@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about-hero explorer-overview-hero">
+    <div class="about-hero-media explorer-overview-media"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <h1>{{ explorer_page.hero_title }}</h1>
+        <p>{{ explorer_page.hero_description }}</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">{{ explorer_page.band_title }}</div>
+        <div class="about-breadcrumb">
+            您现在的位置：
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('explorer') }}">{{ explorer_page.breadcrumb_title }}</a>
+            <span>&gt;</span>
+            <strong>数据浏览</strong>
+        </div>
+    </div>
+</section>
+
+<section id="data-browser" class="section-block explorer-browser-shell museums-browser-shell">
+    <div class="container">
+        <div class="museums-browser-panel">
+            <div class="museums-filter-row museums-filter-search-row">
+                <div class="museums-filter-label">搜索</div>
+                <div class="museums-search-box">
+                    <input id="filter-q" type="search" placeholder="搜索建筑、人物、著作或文化名称">
+                    <button id="apply-filters" class="museums-search-button" type="button">搜索</button>
+                    <button id="reset-filters" class="museums-reset-button" type="button">重置</button>
+                </div>
+            </div>
+
+            <div class="museums-filter-row">
+                <div class="museums-filter-label">板块</div>
+                <div id="dataset-row" class="museums-filter-links">
+                    <button class="museums-filter-link is-active" type="button" data-filter-control="dataset" data-value="">不限</button>
+                    {% for item in explorer_browser_filters.datasets %}
+                    <button class="museums-filter-link" type="button" data-filter-control="dataset" data-value="{{ item.key }}">{{ item.label }}（{{ item.count }}）</button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="museums-filter-row">
+                <div class="museums-filter-label">地区</div>
+                <div id="region-row" class="museums-filter-links"></div>
+            </div>
+
+            <div class="museums-filter-row">
+                <div class="museums-filter-label">类型</div>
+                <div id="category-row" class="museums-filter-links"></div>
+            </div>
+        </div>
+
+        <div class="museums-results-meta">
+            <div class="panel-title">馆藏列表</div>
+            <p id="results-meta">正在加载数据，稍后即可查看当前筛选条件下的条目数量与结果范围。</p>
+        </div>
+
+        <div id="explorer-grid" class="museums-tile-grid"></div>
+        <div id="explorer-pagination" class="museums-pagination" hidden></div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.EXPLORER_DEFAULTS = {{ default_filters | tojson }};
+    window.EXPLORER_BROWSER_FILTERS = {{ explorer_browser_filters.filters | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/explorer_curated_v4.js') }}"></script>
+{% endblock %}

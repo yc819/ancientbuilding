@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if nav_section == "explorer" and explorer_page %}
+<section class="about-hero explorer-overview-hero">
+    <div class="about-hero-media explorer-overview-media"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="container about-hero-inner">
+        <h1>{{ hero_title }}</h1>
+        <p>{{ hero_description }}</p>
+    </div>
+</section>
+
+<section class="about-breadcrumb-band">
+    <div class="container about-breadcrumb-inner">
+        <div class="about-band-title">{{ hero_title }}</div>
+        <div class="about-breadcrumb">
+            您现在的位置:
+            <a href="{{ url_for('home') }}">首页</a>
+            <span>&gt;</span>
+            <a href="{{ url_for('explorer') }}">{{ explorer_page.breadcrumb_title }}</a>
+            <span>&gt;</span>
+            <strong>{{ hero_title }}</strong>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="page-hero">
+    <div class="container">
+        <span class="section-kicker">{{ hero_kicker }}</span>
+        <h1>{{ hero_title }}</h1>
+        <p>{{ hero_description }}</p>
+    </div>
+</section>
+{% endif %}
+
+<section class="section-block viz-atlas-section">
+    <div class="container explorer-viz-shell">
+        <div class="viz-region-controls viz-region-controls--single">
+            <div class="viz-region-nav">
+                <span class="viz-region-nav-label">地区</span>
+                <div id="viz-region-toolbar" class="viz-region-toolbar viz-region-toolbar--line"></div>
+            </div>
+        </div>
+
+        <div class="viz-atlas-layout viz-atlas-layout--map">
+            <article class="viz-atlas-board viz-atlas-board--map">
+                <div class="viz-panel-caption">
+                    <span>分布概览</span>
+                    <strong>按地区展示古建资料的聚集情况与代表条目</strong>
+                </div>
+                <div class="viz-map-stage">
+                    <div class="viz-map-tools">
+                        <button id="viz-map-back" class="viz-map-back" type="button" hidden>返回全国</button>
+                        <div id="viz-map-status" class="viz-map-status">全国分布</div>
+                    </div>
+                    <div id="viz-region-map" class="viz-region-chart" role="img" aria-label="古代建筑资料地区分布图"></div>
+                </div>
+            </article>
+
+            <aside id="viz-region-panel" class="viz-region-panel viz-region-panel--map">
+                <div class="viz-region-panel-empty">正在载入地区数据…</div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<section class="section-block muted-section viz-analysis-section">
+    <div class="container explorer-viz-shell">
+        <div class="viz-analysis-shell">
+            <div class="viz-analysis-grid">
+                <article class="viz-analysis-card viz-analysis-card--donut">
+                    <div class="viz-panel-caption">
+                        <span>资料构成</span>
+                        <strong>四组资料如何分布</strong>
+                    </div>
+                    <div id="viz-dataset-donut" class="viz-donut-shell"></div>
+                </article>
+
+                <article class="viz-analysis-card viz-analysis-card--donut">
+                    <div class="viz-panel-caption">
+                        <span>时代重心</span>
+                        <strong>哪些历史阶段最密集</strong>
+                    </div>
+                    <div id="viz-era-donut" class="viz-donut-shell"></div>
+                </article>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.VISUALIZATION_FOCUS = {{ section_focus | tojson }};
+    window.VISUALIZATION_MAP_BASE_URL = {{ url_for('static', filename='vendor/maps') | tojson }};
+    window.VISUALIZATION_ITEMS_URL = {{ url_for('api_items') | tojson }};
+    window.VISUALIZATION_OVERVIEW_URL = {{ url_for('api_overview') | tojson }};
+</script>
+<script src="{{ url_for('static', filename='vendor/echarts.min.js') }}?v=20260421b"></script>
+<script src="{{ url_for('static', filename='js/visualization.js') }}?v=20260421h"></script>
+{% endblock %}
